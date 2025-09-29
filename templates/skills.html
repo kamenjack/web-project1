@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Skill List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 90%;
+        }
+        th, td {
+            border: 1px solid #999;
+            padding: 8px 12px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        img {
+            max-height: 40px;
+        }
+        /* 高亮闪烁动画 */
+    @keyframes glow {
+      0%, 100% {
+        background-color: transparent;
+      }
+      50% {
+        background-color: #fffa90; /* 柔和黄色发光 */
+      }
+    }
+    .highlight {
+      animation: glow 2s ease-in-out 1;
+      border: 2px solid gold;
+    }
+    </style>
+</head>
+<body>
+    <h1>Skill List</h1>
+    <table>
+        <thead>
+            <tr >
+                <th>Skill Source</th>
+                <th>Icon</th>
+                <th>Skill Name</th>
+                <th>Description / Notes</th>
+                <th>Learn Condition</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for skill in skills %}
+            <tr id="skill-{{ skill.id }}">
+
+                <td> <a href="{% url 'class_detail' skill.source_job.id %}">
+    {{ skill.source_job.title }}
+  </a></td>
+                <td>
+                    {% if skill.icon %}
+                        <img src="{{ skill.icon.url }}" alt="{{ skill.name }}">
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+                <td>{{ skill.name }}</td>
+                <td>{{ skill.description }}</td>
+                <td>{{ skill.learn_condition }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+  <script>
+ window.addEventListener('DOMContentLoaded', () => {
+    const hash = window.location.hash.substring(1);
+    if (hash) {
+      setTimeout(() => {
+        const el = document.getElementById(hash);
+        if (el) {
+          el.classList.add('highlight');
+          // 6秒后移除高亮，防止永久高亮
+          setTimeout(() => el.classList.remove('highlight'), 600);
+          // 额外滚动保证看到元素（有时跳转会偏差）
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 100); // 延迟100毫秒
+    }
+  });
+  </script>
+</body>
+</html>
+{% endblock %}

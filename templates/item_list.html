@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Characters - GameDB{% endblock %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Item List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        table {
+            margin: 20px auto;
+            border-collapse: collapse;
+            width: 90%;
+        }
+        th, td {
+            border: 1px solid #999;
+            padding: 8px 12px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        img {
+            max-height: 40px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Item List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Icon</th>
+                <th>Name</th>
+                <th>Durability</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>Obtain Method</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>
+                    {% if item.icon %}
+                        <img src="{{ item.icon.url }}" alt="{{ item.name }}">
+                    {% else %}
+                        —
+                    {% endif %}
+                </td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.durability }}</td>
+                <td>{{ item.price }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.obtain_method }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ character.name}} - {{ storyline_name }} - Character Detail</title>
+</head>
+<body>
+    <h1>{{ character.name }} - {{ storyline_name }}</h1>
+
+    {% if character.avatar %}
+        <img src="{{ character.avatar.url }}" alt="Avatar" height="200">
+    {% endif %}
+
+    {% if character.icon %}
+        <img src="{{ character.icon.url }}" alt="Icon" height="100">
+    {% endif %}
+
+    <h2>Basic Info</h2>
+    <ul>
+        <li>Joined Chapter: {{ character.joined_charpter }}</li>
+
+        <li>Starting Weapon Level: {{ character.starting_weapon_level }}</li>
+        <li>Starting Class: {{ character.starting_class.title }}</li>
+    </ul>
+
+    <h2>Growth Rates (%)</h2>
+    <ul>
+        <li>HP: {{ character.growth_hp }}</li>
+        <li>Strength: {{ character.growth_strength }}</li>
+        <li>Magic: {{ character.growth_magic }}</li>
+        <li>Skill: {{ character.growth_skill }}</li>
+        <li>Speed: {{ character.growth_speed }}</li>
+        <li>Luck: {{ character.growth_luck }}</li>
+        <li>Defense: {{ character.growth_defense }}</li>
+        <li>Resistance: {{ character.growth_resistance }}</li>
+        <li>Total: {{ character.growth_total }}</li>
+    </ul>
+
+    <h2>Base Stats</h2>
+    <ul>
+        <li>Level: {{ character.level }}</li>
+        <li>HP: {{ character.base_hp }}</li>
+        <li>Strength: {{ character.base_strength }}</li>
+        <li>Magic: {{ character.base_magic }}</li>
+        <li>Skill: {{ character.base_skill }}</li>
+        <li>Speed: {{ character.base_speed }}</li>
+        <li>Luck: {{ character.base_luck }}</li>
+        <li>Defense: {{ character.base_defense }}</li>
+        <li>Resistance: {{ character.base_resistance }}</li>
+        <li>Movement: {{ character.base_movement }}</li>
+    </ul>
+
+    <h2>Class Affinities</h2>
+    <ul>
+        <li>Buddy Class: {{ character.buddy_class.name }} (A+ support target: {{ character.buddy_target }})</li>
+        <li>Marriage Class: {{ character.marriage_class.name }} (S support target: {{ character.marriage_target }})</li>
+    </ul>
+
+    <h2>Personal Skill</h2>
+    <p>{{ character.personal_skills.skill_name }}</p>
+
+</body>
+</html>

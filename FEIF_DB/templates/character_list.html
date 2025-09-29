@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% block title %}Characters - GameDB{% endblock %}
+{% block content %}
+
+<h1>Character Overview</h1>
+<form method="get" id="storylineForm" style="margin-bottom:20px;">
+  <label for="storyline">Select Storyline:</label>
+  <select name="storyline" id="storyline" onchange="document.getElementById('storylineForm').submit()">
+    {% for code, name in storylines %}
+      <option value="{{ code }}" {% if selected_storyline == code %}selected{% endif %}>{{ name }}</option>
+    {% endfor %}
+  </select>
+</form>
+
+<button id="toggleGrowthCapBtn" style="margin-bottom:10px;">Show Growth and Cap</button>
+
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: center;
+  }
+  th {
+    background-color: #f7f7f7;
+  }
+  img {
+    height: 40px;
+  }
+  a {
+    color: #3498db;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  .extra-col {
+    display: none;
+  }
+</style>
+
+<div style="overflow-x:auto;">
+<table>
+  <thead>
+    <tr>
+      <th>Avatar</th>
+      <th>Name</th>
+      <th>Icon</th>
+      <th>Personal Skill</th>
+      <th>Job</th>
+      <th>Join Chapter</th>
+      <th>Join Condition</th>
+      <th>Starting Weapon Level</th>
+
+      <!-- 隐藏列 -->
+      <th class="extra-col">Growth HP</th>
+      <th class="extra-col">Growth Strength</th>
+      <th class="extra-col">Growth Magic</th>
+      <th class="extra-col">Growth Skill</th>
+      <th class="extra-col">Growth Speed</th>
+      <th class="extra-col">Growth Luck</th>
+      <th class="extra-col">Growth Defense</th>
+      <th class="extra-col">Growth Resistance</th>
+      <th class="extra-col">Growth Total</th>
+      <th class="extra-col">Level (int)</th>
+      <th class="extra-col">Base HP</th>
+      <th class="extra-col">Base Strength</th>
+      <th class="extra-col">Base Magic</th>
+      <th class="extra-col">Base Skill</th>
+      <th class="extra-col">Base Speed</th>
+      <th class="extra-col">Base Luck</th>
+      <th class="extra-col">Base Defense</th>
+      <th class="extra-col">Base Resistance</th>
+      <th class="extra-col">Base Movement</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for character in characters %}
+    <tr>
+      <td>
+        {% if character.avatar %}
+          <img src="{{ character.avatar.url }}" alt="Avatar" />
+        {% else %}
+          —
+        {% endif %}
+      </td>
+      <td><a href="{% url 'character_detail' character.id %}">{{ character.name }}</a></td>
+      <td>
+        {% if character.icon %}
+          <img src="{{ character.icon.url }}" alt="Icon" />
+        {% else %}
+          —
+        {% endif %}
+      </td>
+      <td>{{ character.personal_skills }}</td>
+      <td>{{ character.jobs }}</td>
+      <td>{{ character.joined_charpter }}</td>  <!-- 修正拼写 -->
+      <td>{{ character.join_condition|default:"—" }}</td>
+      <td>{{ character.starting_weapon_level|default:"—" }}</td>
+
+      <!-- 隐藏列 -->
+      <td class="extra-col">{{ character.growth_hp|default:"—" }}</td>
+      <td class="extra-col">{{ character.growth_strength|default:"—" }}</td>
+      <td class="extra-col">{{ character.growth_magic|default:"—" }}</td>
+      <td class="extra-col">{{ character.growth_skill|default:"—" }}</td>
+      <td class="extra-col">{{ character.growth_speed|default:"—" }}</td>
+      <td class="extra-col">{{ character.growth_luck|default:"—" }}</td>
+      <td class="extra-col">{{ character.growth_defense|default:"—" }}</td>
+      <td class="extra-col">{{ character.growth_resistance|default:"—" }}</td>
+      <td class="extra-col">{{ character.growth_total|default:"—" }}</td>
+      <td class="extra-col">{{ character.level|default:"—" }}</td>
+      <td class="extra-col">{{ character.base_hp|default:"—" }}</td>
+      <td class="extra-col">{{ character.base_strength|default:"—" }}</td>
+      <td class="extra-col">{{ character.base_magic|default:"—" }}</td>
+      <td class="extra-col">{{ character.base_skill|default:"—" }}</td>
+      <td class="extra-col">{{ character.base_speed|default:"—" }}</td>
+      <td class="extra-col">{{ character.base_luck|default:"—" }}</td>
+      <td class="extra-col">{{ character.base_defense|default:"—" }}</td>
+      <td class="extra-col">{{ character.base_resistance|default:"—" }}</td>
+      <td class="extra-col">{{ character.base_movement|default:"—" }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="30">No character data available.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
+<script>
+  document.getElementById('toggleGrowthCapBtn').addEventListener('click', function() {
+    const extraCols = document.querySelectorAll('.extra-col');
+    const isHidden = extraCols[0].style.display === 'none' || extraCols[0].style.display === '';
+    extraCols.forEach(col => {
+      col.style.display = isHidden ? 'table-cell' : 'none';
+    });
+    this.textContent = isHidden ? 'Hide Growth and Cap' : 'Show Growth and Cap';
+  });
+</script>
+
+{% endblock %}
+

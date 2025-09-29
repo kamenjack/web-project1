@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>{{ job.title }} - Job Detail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        h1 {
+            margin-bottom: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 25px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px 12px;
+            vertical-align: middle;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        img {
+            max-height: 60px;
+            display: block;
+            margin: 0 auto;
+        }
+        .section-title {
+            margin-top: 30px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 1.2em;
+            border-bottom: 2px solid #333;
+            padding-bottom: 3px;
+        }
+        .remarks {
+            white-space: pre-wrap;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 12px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ job.title }}</h1>
+    <p><strong>Allegiance:</strong>
+        {% if job.Allegiance == 'A' %}Neutral
+        {% elif job.Allegiance == 'B' %}Dark
+        {% elif job.Allegiance == 'C' %}Light
+        {% else %}Unknown
+        {% endif %}
+    </p>
+    <p><strong>Level:</strong>
+        {% if job.level == 'A' %}Base
+        {% elif job.level == 'B' %}Promoted
+        {% else %}Unknown
+        {% endif %}
+    </p>
+
+    <div class="section-title">Job Skills</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Skill</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+  {% if job.skills.exists %}
+    <div style="display:flex; gap:4px; align-items:center; flex-wrap:wrap;">
+      {% for skill in job.skills.all %}
+        {% if skill.icon %}
+          <a href="{% url 'skill_list' %}#skill-{{ skill.id }}">
+            <img src="{{ skill.icon.url }}" alt="{{ skill.name }}" style="height:30px;">
+          </a>
+        {% else %}
+          <span>—</span>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% else %}
+    —
+  {% endif %}
+</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="section-title">Weapon & Movement</div>
+    <table>
+        <tbody>
+            <tr>
+                <th>Weapon Proficiency Cap</th>
+                <td>{{ job.Weapon_Proficiency_Cap }}</td>
+            </tr>
+            <tr>
+                <th>Movement</th>
+                <td>{{ job.movement }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="section-title">Growth Rate Modifiers (%)</div>
+    <table>
+        <thead>
+            <tr>
+                <th>HP</th>
+                <th>Strength</th>
+                <th>Magic</th>
+                <th>Skill</th>
+                <th>Speed</th>
+                <th>Luck</th>
+                <th>Defense</th>
+                <th>Resistance</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ job.growth_hp }}</td>
+                <td>{{ job.growth_strength }}</td>
+                <td>{{ job.growth_magic }}</td>
+                <td>{{ job.growth_skill }}</td>
+                <td>{{ job.growth_speed }}</td>
+                <td>{{ job.growth_luck }}</td>
+                <td>{{ job.growth_defense }}</td>
+                <td>{{ job.growth_resistance }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="section-title">Stat Caps</div>
+    <table>
+        <thead>
+            <tr>
+                <th>HP</th>
+                <th>Strength</th>
+                <th>Magic</th>
+                <th>Skill</th>
+                <th>Speed</th>
+                <th>Luck</th>
+                <th>Defense</th>
+                <th>Resistance</th>
+                <th>Total Cap</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ job.cap_hp }}</td>
+                <td>{{ job.cap_strength }}</td>
+                <td>{{ job.cap_magic }}</td>
+                <td>{{ job.cap_skill }}</td>
+                <td>{{ job.cap_speed }}</td>
+                <td>{{ job.cap_luck }}</td>
+                <td>{{ job.cap_defense }}</td>
+                <td>{{ job.cap_resistance }}</td>
+                <td>{{ job.cap_total }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="section-title">Class Traits</div>
+    <p>{{ job.Class_Traits|default:"—" }}</p>
+
+    <div class="section-title">Remarks</div>
+    <div class="remarks">{{ job.remarks|default:"No remarks." }}</div>
+</body>
+</html>

@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Class List</h1>
+
+<button id="toggleGrowthCapBtn" style="margin-bottom:10px;">Show Growth and Cap</button>
+
+{% regroup classes by Allegiance as classes_by_allegiance %}
+
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: center;
+  }
+  th {
+    background-color: #f7f7f7;
+  }
+  img {
+    height: 40px;
+  }
+  a {
+    color: #3498db;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+
+  /* 隐藏所有新增的 growth 和 cap 列 */
+  .extra-col {
+    display: none ;
+  }
+</style>
+
+<div style="overflow-x:auto;">
+<table>
+  <thead>
+    <tr>
+      <th>Allegiance</th>
+      <th>Title</th>
+      <th>Level</th>
+      <th>Job Skills</th>
+      <th>Weapon Proficiency Cap</th>
+      <th>Movement</th>
+      <th>Class Traits</th>
+      <th>Remarks</th>
+
+      <!-- 隐藏列 -->
+      <th class="extra-col">Growth HP</th>
+      <th class="extra-col">Growth Strength (%)</th>
+      <th class="extra-col">Growth Magic (%)</th>
+      <th class="extra-col">Growth Skill (%)</th>
+      <th class="extra-col">Growth Speed (%)</th>
+      <th class="extra-col">Growth Luck (%)</th>
+      <th class="extra-col">Growth Defense (%)</th>
+      <th class="extra-col">Growth Resistance (%)</th>
+      <th class="extra-col">HP Cap</th>
+      <th class="extra-col">Strength Cap</th>
+      <th class="extra-col">Magic Cap</th>
+      <th class="extra-col">Skill Cap</th>
+      <th class="extra-col">Speed Cap</th>
+      <th class="extra-col">Luck Cap</th>
+      <th class="extra-col">Defense Cap</th>
+      <th class="extra-col">Resistance Cap</th>
+      <th class="extra-col">Total Cap</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% if classes.exists %}
+      {% for group in classes_by_allegiance %}
+        {% for job in group.list %}
+          <tr>
+            {% if forloop.first %}
+              <td rowspan="{{ group.list|length }}">
+                {% if group.grouper == 'A' %} Neutral
+                {% elif group.grouper == 'B' %} Dark
+                {% elif group.grouper == 'C' %} Light
+                {% else %} Unknown
+                {% endif %}
+              </td>
+            {% endif %}
+
+            <td><a href="{% url 'class_detail' job.id %}">{{ job.title }}</a></td>
+            <td>
+              {% if job.level == 'A' %} Base
+              {% elif job.level == 'B' %} Promoted
+                  {% elif job.level == 'C' %}Special
+              {% else %} Unknown
+              {% endif %}
+            </td>
+
+            <!-- 多技能列 -->
+            <td>
+              {% if job.source_skills.exists %}
+                {% for skill in job.source_skills.all %}
+                  {% if skill.icon %}
+                    <a href="{% url 'skill_list' %}#skill-{{ skill.id }}">
+                      <img src="{{ skill.icon.url }}" alt="{{ skill.name }}" style="margin-right:4px; vertical-align:middle;">
+                    </a>
+                  {% else %}
+                    —
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+                —
+              {% endif %}
+            </td>
+
+            <td>{{ job.Weapon_Proficiency_Cap }}</td>
+            <td>{{ job.movement }}</td>
+            <td>{{ job.Class_Traits }}</td>
+            <td>{{ job.remarks|default:"—" }}</td>
+
+            <!-- 隐藏列内容 -->
+            <td class="extra-col">{{ job.growth_hp|default:"—" }}</td>
+            <td class="extra-col">{{ job.growth_strength|default:"—" }}%</td>
+            <td class="extra-col">{{ job.growth_magic|default:"—" }}%</td>
+            <td class="extra-col">{{ job.growth_skill|default:"—" }}%</td>
+            <td class="extra-col">{{ job.growth_speed|default:"—" }}%</td>
+            <td class="extra-col">{{ job.growth_luck|default:"—" }}%</td>
+            <td class="extra-col">{{ job.growth_defense|default:"—" }}%</td>
+            <td class="extra-col">{{ job.growth_resistance|default:"—" }}%</td>
+            <td class="extra-col">{{ job.cap_hp|default:"—" }}</td>
+            <td class="extra-col">{{ job.cap_strength|default:"—" }}</td>
+            <td class="extra-col">{{ job.cap_magic|default:"—" }}</td>
+            <td class="extra-col">{{ job.cap_skill|default:"—" }}</td>
+            <td class="extra-col">{{ job.cap_speed|default:"—" }}</td>
+            <td class="extra-col">{{ job.cap_luck|default:"—" }}</td>
+            <td class="extra-col">{{ job.cap_defense|default:"—" }}</td>
+            <td class="extra-col">{{ job.cap_resistance|default:"—" }}</td>
+            <td class="extra-col">{{ job.cap_total|default:"—" }}</td>
+          </tr>
+        {% endfor %}
+      {% endfor %}
+    {% else %}
+      <tr><td colspan="26">No jobs found.</td></tr>
+    {% endif %}
+  </tbody>
+</table>
+</div>
+
+<script>
+document.getElementById('toggleGrowthCapBtn').addEventListener('click', function() {
+    const extraCols = document.querySelectorAll('.extra-col');
+    const isHidden = extraCols[0].style.display === 'none' || extraCols[0].style.display === '';
+    extraCols.forEach(col => {
+        col.style.display = isHidden ? 'table-cell' : 'none';
+    });
+    this.textContent = isHidden ? 'Hide Growth and Cap' : 'Show Growth and Cap';
+});
+</script>
+
+{% endblock %}

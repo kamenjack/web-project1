@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}Characters - GameDB{% endblock %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weapon List</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #aaa; padding: 8px; text-align: center; }
+        th { background-color: #eee; }
+        img { max-width: 50px; }
+    </style>
+</head>
+<body>
+    <h1>Weapon List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Icon</th>
+                <th>Name</th>
+                <th>Level</th>
+                <th>Might</th>
+                <th>Hit</th>
+                <th>Crit</th>
+                <th>Avoid</th>
+                <th>Dodge</th>
+                <th>Range</th>
+                <th>Effect</th>
+                <th>Price</th>
+                <th>Obtain Method</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+                {% for weapon in category.weapons.all %}
+                    <tr>
+                        {% if forloop.first %}
+                            <td rowspan="{{ category.weapons.count }}">{{ category.name }}</td>
+                        {% endif %}
+                        <td>
+                            {% if weapon.icon %}
+                                <img src="{{ weapon.icon.url }}" alt="{{ weapon.name }}">
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>{{ weapon.name }}</td>
+                        <td>{{ weapon.level }}</td>
+                        <td>{{ weapon.might }}</td>
+                        <td>{{ weapon.hit }}</td>
+                        <td>
+                            {% if weapon.crit is not None %}
+                                {{ weapon.crit }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>{{ weapon.avoid }}</td>
+                        <td>{{ weapon.dodge }}</td>
+                        <td>{{ weapon.range }}</td>
+                        <td>{{ weapon.effect }}</td>
+                        <td>{{ weapon.price }}</td>
+                        <td>{{ weapon.obtain_method }}</td>
+                    </tr>
+                {% endfor %}
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+{% endblock %}
