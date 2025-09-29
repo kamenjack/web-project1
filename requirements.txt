@@ -22,7 +22,7 @@ pytz==2025.2
 scipy==1.14.1
 setuptools==75.8.2
 six==1.16.0
-# Editable install with no version control (tombo==0.0.1)
+
 
 tomli==2.0.2
 tzdata==2025.2
